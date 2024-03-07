@@ -28,7 +28,106 @@ config CXD56_SPIFLASHSIZE
 
 comment "Audio Options"
 
-if AUDIO_CXD56 || CXD56_AUDIO
+if AUDIO_CXD56
+
+menu "NuttX Audio Framework based Driver lower setups"
+menu "Mic assign on CXD5247"
+
+config CXD5247_MICID_CH0
+	int "MIC Channel 0 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 1
+	range 1 15
+	---help---
+		MIC select for channel 0. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more information.
+
+config CXD5247_MICID_CH1
+	int "MIC Channel 1 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 2
+	range 1 15
+	---help---
+		MIC select for channel 1. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more information.
+
+config CXD5247_MICID_CH2
+	int "MIC Channel 2 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 3
+	range 1 15
+	---help---
+		MIC select for channel 2. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more information.
+
+config CXD5247_MICID_CH3
+	int "MIC Channel 3 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 4
+	range 1 15
+	---help---
+		MIC select for channel 3. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more information.
+
+config CXD5247_MICID_CH4
+	int "MIC Channel 4 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 15
+	range 1 15
+	---help---
+		MIC select for channel 4. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more information.
+
+config CXD5247_MICID_CH5
+	int "MIC Channel 5 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 15
+	range 1 15
+	---help---
+		MIC select for channel 5. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more information.
+
+config CXD5247_MICID_CH6
+	int "MIC Channel 6 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 15
+	range 1 15
+	---help---
+		MIC select for channel 6. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more information.
+
+config CXD5247_MICID_CH7
+	int "MIC Channel 7 Assign 1~4:Analog 5~12:Digial 15:Not used"
+	default 15
+	range 1 15
+	---help---
+		MIC select for channel 7. 1 to 4 is for Analog MIC A to D.
+		5 to 12 is for Digital MIC 0 to 7. And 15 means not used. Please see
+		https://developer.sony.com/spresense/development-guides/hw_docs_en.html#_how_to_use_microphones
+		for more hardware information.
+
+endmenu # "Mic assign on CXD5247"
+
+config CXD5247_OSC_FREQ_24MHZ
+	bool "Is CXD5247 OSC frequency 24.576MHz"
+	default n
+	---help---
+		CXD5247 can use Oscilator of which frequency is 24.576MHz or 49.152MHz.
+		Set "Y" if you use 24.576MHz. The Spresense board uses 49.152MHz, so set
+		this "n".
+
+endmenu # "NuttX Audio Framework based Driver lower setups"
+endif # AUDIO_CXD56
+
+menu "Old standalone audio options"
+if CXD56_AUDIO
 
 choice
 	prompt "Audio I2S settings"
@@ -445,6 +544,7 @@ config CXD56_AUDIO_MIC_BOOT_WAIT
 
 endmenu
 endif # Spresense Audio
+endmenu # "Old standalone audio options"
 
 config CXD56_IMAGEPROC
 	bool "Spresense Image Processor"
@@ -785,6 +885,76 @@ config CXD56_BINARY
 	---help---
 		Create nuttx.spk binary format used on spresense board and boards
 		based on cxd56xx arch.
+
+menu "WIZnet Ethernet on CXD5602"
+
+if NET_WIZNET
+
+choice
+	prompt "WIZnet SPI selection"
+	default CXD56_WIZNET_SPI5
+
+config CXD56_WIZNET_SPI4
+	bool "Use SPI4"
+	select CXD56_SPI4
+
+config CXD56_WIZNET_SPI5
+	bool "Use SPI5"
+	select CXD56_SPI5
+
+endchoice
+
+if CXD56_WIZNET_SPI4
+
+config CXD56_WIZNET_SPI4_DMAC
+	bool "Use DMAC for SPI4"
+	default n
+	select CXD56_DMAC_SPI4_TX
+	select CXD56_DMAC_SPI4_RX
+
+endif # CXD56_WIZNET_SPI4
+
+if CXD56_WIZNET_SPI5
+
+config CXD56_WIZNET_SPI5_DMAC
+	bool "Use DMAC for SPI5"
+	default n
+	select CXD56_DMAC_SPI5_TX
+	select CXD56_DMAC_SPI5_RX
+
+endif # CXD56_WIZNET_SPI5
+
+choice CXD56_WIZNET_PIN_RST
+	prompt "WIZnet Reset pin configuration."
+	default CXD56_WIZNET_RST_EMMC_DATA3
+
+config CXD56_WIZNET_RST_EMMC_DATA3
+	bool "Use PIN EMMC_DATA3"
+
+config CXD56_WIZNET_RST_I2S0_BCK
+	bool "Use PIN I2S0_BCK"
+
+endchoice
+
+choice CXD56_WIZNET_PIN_INT
+	prompt "WIZnet Interrupt pin configuration."
+	default CXD56_WIZNET_INT_EMMC_DATA2
+
+config CXD56_WIZNET_INT_EMMC_DATA2
+	bool "Use PIN EMMC_DATA2"
+
+config CXD56_WIZNET_INT_I2S0_LRCK
+	bool "Use PIN I2S0_LRCK"
+
+endchoice
+
+config CXD56_WIZNET_USE_SWCS
+	bool "Use GPIO (I2S_DIN) as a Chip Select pin."
+	default y
+
+endif # NET_WIZNET
+
+endmenu # "WIZnet Ethernet on CXD5602"
 
 config CXD56_CAMERA_LATE_INITIALIZE
 	bool "Camera drivers late initialization"
